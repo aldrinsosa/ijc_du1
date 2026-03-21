@@ -1,3 +1,4 @@
+#include "error.h"
 #include <limits.h>
 #include <assert.h>
 #include <stdio.h>
