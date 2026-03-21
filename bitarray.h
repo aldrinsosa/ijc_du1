@@ -72,9 +72,9 @@ typedef unsigned long bitarray_index_tx;
         unsigned long idx_bit = idx % BITS_PER_BLOCK;
         unsigned long bitmask = 1UL << idx_bit;
         unsigned long result = array_name[idx_block] & bitmask;
-        if(result == 0)
-            return false;
-        return true;
+        if(result != 0)
+            return true;
+        return false;
     }
 #else
     #define bitarray_free(array_name) free((array_name))
@@ -95,6 +95,22 @@ typedef unsigned long bitarray_index_tx;
             }\
         }\
     } while(0)
+    #define bitarray_setbit(array_name, idx, expression) \
+        do{\
+            unsigned long _idx_block = 1 + ((idx) / BITS_PER_BLOCK);\
+            unsigned long _idx_bit = (idx) % BITS_PER_BLOCK;\
+            unsigned long _bitmask = 1UL << _idx_bit;\
+            if ((expression))\
+            {\
+                (array_name)[_idx_block] = (array_name)[_idx_block] | _bitmask;\
+            }\
+            else{\
+                (array_name)[_idx_block] = (array_name)[_idx_block] & ~_bitmask;\
+            }\
+        } while(0)
+
+    #define bitarray_getbit(array_name, idx) \
+        (((array_name)[1 + ((idx) / BITS_PER_BLOCK)] & (1UL << ((idx) % BITS_PER_BLOCK))) != 0)
 
 
 #endif
