@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef unsigned long *bitarray_t;
 typedef unsigned long bitarray_index_tx;
@@ -54,9 +55,31 @@ typedef unsigned long bitarray_index_tx;
             }
         }
     }
+    inline void bitarray_setbit(bitarray_t array_name, unsigned long idx, bool expression){
+        unsigned long idx_block = 1 + (idx / BITS_PER_BLOCK);
+        unsigned long idx_bit = idx % BITS_PER_BLOCK;
+        unsigned long bitmask = 1UL << idx_bit;
+        if (expression)
+        {
+            array_name[idx_block] = array_name[idx_block] | bitmask;
+        }
+        else{
+            array_name[idx_block] = array_name[idx_block] & ~bitmask;
+        }
+    }
+    inline bool bitarray_getbit(bitarray_t array_name, unsigned long idx){
+        unsigned long idx_block = 1 + (idx / BITS_PER_BLOCK);
+        unsigned long idx_bit = idx % BITS_PER_BLOCK;
+        unsigned long bitmask = 1UL << idx_bit;
+        unsigned long result = array_name[idx_block] & bitmask;
+        if(result == 0)
+            return false;
+        return true;
+    }
 #else
     #define bitarray_free(array_name) free((array_name))
     #define bitarray_size(array_name) ((array_name)[0])
+    //add do while to limit the scope of the variables and the if statments
     #define bitarray_fill(array_name, expression) \
     do {\
         unsigned long _size = bitarray_size(array_name);\
