@@ -30,6 +30,25 @@ typedef unsigned long bitarray_index_tx;
     }\
     name_array[0] = (size)
 
+#ifndef NO_CHECK
+    #define CHECK_LIMIT(array_name, index) \
+        do{\
+            unsigned long _limit = bitarray_size((array_name));\
+            if ((index) >= _limit) \
+            {\
+                error_exit("bitarray_getbit: Index %lu mimo rozsah 0..%lu",(unsigned long)(index), (unsigned long)(_limit - 1));\
+            }\
+        } while (0)
+    //the 0 next to error_exit is for the code in order to compile
+    //if the limit is exceed the program finishes with error else returns 0
+    #define CHECK_LIMIT_EXPR(array_name, index)\
+        (((index) >= (bitarray_size((array_name)))) ? (error_exit("bitarray_getbit: Index %lu mimo rozsah 0..%lu",(unsigned long)(index), (unsigned long)((bitarray_size((array_name))) - 1)), 0) : 0)
+#else
+    #define CHECK_LIMIT(array_name, index)
+    #define CHECK_LIMIT_EXPR(array_name, index)
+#endif
+    
+
 #ifdef USE_INLINE
     inline void bitarray_free(bitarray_t array_name){
         free(array_name);
@@ -57,22 +76,31 @@ typedef unsigned long bitarray_index_tx;
         }
     }
     inline void bitarray_setbit(bitarray_t array_name, unsigned long idx, bool expression){
+        CHECK_LIMIT(array_name, idx);
+        //get in which block from the array the bit resides
         unsigned long idx_block = 1 + (idx / BITS_PER_BLOCK);
+        //get in which bit from the block the bit is located
         unsigned long idx_bit = idx % BITS_PER_BLOCK;
+        //creates a bitmask with a 1 in the place where the bit is located
         unsigned long bitmask = 1UL << idx_bit;
         if (expression)
         {
+            //set the bit at 1
             array_name[idx_block] = array_name[idx_block] | bitmask;
         }
         else{
+            //set the bit at 0
             array_name[idx_block] = array_name[idx_block] & ~bitmask;
         }
     }
     inline bool bitarray_getbit(bitarray_t array_name, unsigned long idx){
+        CHECK_LIMIT(array_name, idx);
         unsigned long idx_block = 1 + (idx / BITS_PER_BLOCK);
         unsigned long idx_bit = idx % BITS_PER_BLOCK;
         unsigned long bitmask = 1UL << idx_bit;
+        //compares the block of the array with the mask
         unsigned long result = array_name[idx_block] & bitmask;
+        //if the bit was set at 1 there would be some kind of value different than 0 in result
         if(result != 0)
             return true;
         return false;
@@ -86,18 +114,19 @@ typedef unsigned long bitarray_index_tx;
         unsigned long _size = bitarray_size(array_name);\
         unsigned long _blocks = ((_size + BITS_PER_BLOCK - 1) / BITS_PER_BLOCK);\
         if ((expression)){\
-            for (unsigned long _i = 1; i <= _blocks; i++){\
-                (array_name)[i] = ~0UL;\
+            for (unsigned long _i = 1; _i <= _blocks; _i++){\
+                (array_name)[_i] = ~0UL;\
             }\
         }\
         else { \
-            for (unsigned long _i = 1; i <= _blocks; i++){\
-                (array_name)[i] = 0;\
+            for (unsigned long _i = 1; _i <= _blocks; _i++){\
+                (array_name)[_i] = 0;\
             }\
         }\
     } while(0)
     #define bitarray_setbit(array_name, idx, expression) \
         do{\
+            CHECK_LIMIT(array_name, idx);\
             unsigned long _idx_block = 1 + ((idx) / BITS_PER_BLOCK);\
             unsigned long _idx_bit = (idx) % BITS_PER_BLOCK;\
             unsigned long _bitmask = 1UL << _idx_bit;\
@@ -110,8 +139,10 @@ typedef unsigned long bitarray_index_tx;
             }\
         } while(0)
 
+    //if the limit isn't exceed gets a 0 that is ignorred due to the coma operator    
+    //replace all the variables from the inline function with the calculations
     #define bitarray_getbit(array_name, idx) \
-        (((array_name)[1 + ((idx) / BITS_PER_BLOCK)] & (1UL << ((idx) % BITS_PER_BLOCK))) != 0)
+        (CHECK_LIMIT_EXPR(array_name, idx),(((array_name)[1 + ((idx) / BITS_PER_BLOCK)] & (1UL << ((idx) % BITS_PER_BLOCK))) != 0))
 
 
 #endif
