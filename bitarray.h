@@ -35,7 +35,43 @@ typedef unsigned long bitarray_index_tx;
     inline unsigned long bitarray_size (bitarray_t array_name){
         return array_name[0];
     }
+    inline void bitarray_fill(bitarray_t array_name, bool expression){
+        unsigned long size = bitarray_size(array_name);
+        //calculates the amounts of blocks the array uses
+        unsigned long blocks = ((size + BITS_PER_BLOCK - 1) / BITS_PER_BLOCK); 
+        if (expression)
+        {
+            for (unsigned long i = 1; i <= blocks; i++)
+            {
+                //makes every bit in the block 1
+                array_name[i] = ~0UL;
+            }
+        }
+        else{
+            for (unsigned long i = 1; i <= blocks; i++)
+            {
+                array_name[i] = 0;
+            }
+        }
+    }
 #else
     #define bitarray_free(array_name) free((array_name))
     #define bitarray_size(array_name) ((array_name)[0])
+    #define bitarray_fill(array_name, expression) \
+    do {\
+        unsigned long _size = bitarray_size(array_name);\
+        unsigned long _blocks = ((_size + BITS_PER_BLOCK - 1) / BITS_PER_BLOCK);\
+        if ((expression)){\
+            for (unsigned long _i = 1; i <= _blocks; i++){\
+                (array_name)[i] = ~0UL;\
+            }\
+        }\
+        else { \
+            for (unsigned long _i = 1; i <= _blocks; i++){\
+                (array_name)[i] = 0;\
+            }\
+        }\
+    } while(0)
+
+
 #endif
