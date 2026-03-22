@@ -7,8 +7,11 @@
 #include "eratosthenes.h"
 #include "bitarray.h"
 #include <stdio.h>
+#include <time.h>
 
 int main (void) {
+    clock_t start_t;
+    start_t = clock();
     bitarray_alloc(array, 444000000);
     Eratosthenes(array);
     unsigned long primes [10] = {};
@@ -31,6 +34,7 @@ int main (void) {
     {
         printf("%lu\n", primes[i - 1]);
     }
+    fprintf(stderr, "Time=%.3g\n", (double)(clock()-start_t)/CLOCKS_PER_SEC);
     return 0;
 }
 
