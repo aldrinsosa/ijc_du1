@@ -20,7 +20,7 @@
 int main (void) {
     clock_t start_t;
     start_t = clock();
-    bitarray_alloc(array, 444000000);
+    bitarray_create(array, 444000000);
     Eratosthenes(array);
     unsigned long primes [10];
     int counter = 0;
@@ -37,7 +37,6 @@ int main (void) {
         primes[counter] = i; 
         counter++;
     }
-    bitarray_free(array);
     for (int i = 10; i > 0; i--)
     {
         printf("%lu\n", primes[i - 1]);
