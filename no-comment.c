@@ -152,4 +152,21 @@ int main (int argc, char *argv[]){
             break;
         }   
     }
+    if (current_state == COMMENT_BLOCK || current_state == COMMENT_STAR)
+    {
+        error_exit("file finished in an uncompleted comment\n");
+    }
+    else if (current_state == ESCAPE_STRING || current_state == STRING)
+    {
+        error_exit("file finished in an uncompleted string\n");
+    }
+    else if (current_state == CHAR || current_state == ESCAPE_CHAR)
+    {
+        error_exit("file finished in an uncompleted char\n");
+    }
+    else if (current_state == SLASH)
+    {
+        putchar('/');
+    }
+    
 }
