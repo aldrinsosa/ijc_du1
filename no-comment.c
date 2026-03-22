@@ -1,8 +1,10 @@
-// no-comments.c
+// no-comment.c
 // Řešení IJC-DU1, příklad a), 22.3.2026
 // Autor: Aldrin Joseph Sosa Dominguez, FIT
 // Přeloženo: clang 17.0.0
 // Program to delete the comments of a c file
+
+#define _POSIX_C_SOURCE 200809L
 
 #include "error.h"
 #include <stdio.h>
@@ -186,5 +188,10 @@ int main (int argc, char *argv[]){
     {
         putchar('/');
     }
+    if (input != stdin)
+    {
+        fclose(input);
+    }
+    
     return 0;
 }
