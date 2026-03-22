@@ -4,7 +4,6 @@
 // Přeloženo: clang 17.0.0
 // Implementation to get the last 10 prime numbers
 
-#include "eratosthenes.h"
 #include "bitarray.h"
 #include <stdio.h>
 #include <time.h>
@@ -16,6 +15,9 @@
     extern inline void bitarray_setbit(bitarray_t array_name, unsigned long idx, bool expression);
     extern inline bool bitarray_getbit(bitarray_t array_name, unsigned long idx);
 #endif
+
+// Prototype of the Eratosthenes function
+void Eratosthenes(bitarray_t pole);
 
 int main (void) {
     clock_t start_t;
