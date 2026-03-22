@@ -9,12 +9,20 @@
 #include <stdio.h>
 #include <time.h>
 
+#ifdef USE_INLINE
+    extern inline void bitarray_free(bitarray_t array_name);
+    extern inline unsigned long bitarray_size(bitarray_t array_name);
+    extern inline void bitarray_fill(bitarray_t array_name, bool expression);
+    extern inline void bitarray_setbit(bitarray_t array_name, unsigned long idx, bool expression);
+    extern inline bool bitarray_getbit(bitarray_t array_name, unsigned long idx);
+#endif
+
 int main (void) {
     clock_t start_t;
     start_t = clock();
     bitarray_alloc(array, 444000000);
     Eratosthenes(array);
-    unsigned long primes [10] = {};
+    unsigned long primes [10];
     int counter = 0;
     for (unsigned long i = bitarray_size(array) - 1; i > 0; i--)
     {
