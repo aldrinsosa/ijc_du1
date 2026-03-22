@@ -1,3 +1,9 @@
+// bitarray.h
+// Řešení IJC-DU1, příklad a), 22.3.2026
+// Autor: Aldrin Joseph Sosa Dominguez, FIT
+// Přeloženo: clang 17.0.0
+// Header file with macros and inline functions for bit array manipulation
+
 #include "error.h"
 #include <limits.h>
 #include <assert.h>

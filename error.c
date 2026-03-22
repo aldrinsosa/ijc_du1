@@ -1,3 +1,9 @@
+// error.c
+// Řešení IJC-DU1, příklad b), 22.3.2026
+// Autor: Aldrin Joseph Sosa Dominguez, FIT
+// Přeloženo: clang 17.0.0
+// Implementation of error functions
+
 #include "error.h"
 #include <stdio.h>
 #include <stdlib.h>
