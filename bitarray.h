@@ -3,7 +3,8 @@
 // Autor: Aldrin Joseph Sosa Dominguez, FIT
 // Přeloženo: clang 17.0.0
 // Header file with macros and inline functions for bit array manipulation
-
+#ifndef BITARRAY
+#define BITARRAY
 #include "error.h"
 #include <limits.h>
 #include <assert.h>
@@ -151,4 +152,5 @@ typedef unsigned long bitarray_index_tx;
         (CHECK_LIMIT_EXPR(array_name, idx),(((array_name)[1 + ((idx) / BITS_PER_BLOCK)] & (1UL << ((idx) % BITS_PER_BLOCK))) != 0))
 
 
+#endif
 #endif
