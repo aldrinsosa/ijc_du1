@@ -150,7 +150,6 @@ int main (int argc, char *argv[]){
                 current_state = COMMENT_BLOCK;
             }
             break;
+        }   
     }
-    
-    
 }
