@@ -5,6 +5,7 @@
 // Implementation of the Eratosthenes algorithm
 
 #include "bitarray.h"
+#include "eratosthenes.h"
 #include <math.h>
 
 void Eratosthenes(bitarray_t array){
