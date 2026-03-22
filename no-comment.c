@@ -6,6 +6,8 @@
 
 #include "error.h"
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 typedef enum {
     NORMAL,
@@ -31,6 +33,22 @@ int main (int argc, char *argv[]){
             error_exit("no-comment= error at opening %s \n", argv[1]);
         }
     }
+
+    struct stat st_input, st_output;
+
+    //fstat retrieves the information of the files using POSIX
+    //fileno gets the file descriptor of the file
+    if ((fstat(fileno(input), &st_input) == 0) && ((fstat(fileno(stdout), &st_output) == 0)))
+    {
+        //checks if they are file with the same inode(st_ino) and in the same device(st_dev)
+        if ((st_input.st_ino == st_output.st_ino) && (st_input.st_dev == st_output.st_dev))
+        {
+            error_exit("The input and the output are the same\n");
+        }
+        
+    }
+    
+
     State current_state = NORMAL;
     int ch;
     while ((ch = fgetc(input)) != EOF)
@@ -168,5 +186,5 @@ int main (int argc, char *argv[]){
     {
         putchar('/');
     }
-    
+    return 0;
 }
