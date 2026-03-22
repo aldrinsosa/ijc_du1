@@ -52,7 +52,7 @@ typedef unsigned long bitarray_index_tx;
         (((index) >= (bitarray_size((array_name)))) ? (error_exit("bitarray_getbit: Index %lu mimo rozsah 0..%lu",(unsigned long)(index), (unsigned long)((bitarray_size((array_name))) - 1)), 0) : 0)
 #else
     #define CHECK_LIMIT(array_name, index)
-    #define CHECK_LIMIT_EXPR(array_name, index)
+    #define CHECK_LIMIT_EXPR(array_name, index) (0)
 #endif
     
 
