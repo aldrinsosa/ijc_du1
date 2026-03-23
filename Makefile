@@ -33,5 +33,3 @@ no-comment: no-comment.o error.o
 run: all
 	ulimit -s 60000 && ./primes
 	ulimit -s 60000 && ./primes-i
-	./no-comment no-comment.c
-	./no-comment no-comment.c >no-comment-result

@@ -68,6 +68,7 @@ int main (int argc, char *argv[]){
                 putchar(ch);
                 current_state = CHAR;
             }
+            // don't write the slash until is safe to know that is a character and no a comment
             else if (ch == '/')
             {
                 current_state = SLASH;
@@ -79,10 +80,12 @@ int main (int argc, char *argv[]){
             break;
         case STRING:
             putchar(ch);
+            // finish the string
             if (ch == '\"')
             {
                 current_state = NORMAL;
             }
+            // start a escape character
             else if (ch == '\\')
             {
                 current_state = ESCAPE_STRING;
@@ -90,36 +93,43 @@ int main (int argc, char *argv[]){
             break;
         case CHAR:
             putchar(ch);
+            // finish the char 
             if (ch == '\'')
             {
                 current_state = NORMAL;
             }
+            // start a escape character
             else if (ch == '\\')
             {
                 current_state = ESCAPE_CHAR;
             }
             break;
         case SLASH:
+            // start a comment line
             if (ch == '/')
             {
                 current_state = COMMENT_LINE;
             }
+            // start a comment block
             else if (ch == '*')
             {
                 current_state = COMMENT_BLOCK;
             }
+            // start a string
             else if (ch == '\"')
             {
                 putchar('/');
                 putchar(ch);
                 current_state = STRING;
             }
+            // start a char
             else if (ch == '\'')
             {
                 putchar('/');
                 putchar(ch);
                 current_state = CHAR;
             }
+            // write the previus slash and the current char 
             else
             {
                 putchar('/');
@@ -139,10 +149,12 @@ int main (int argc, char *argv[]){
             current_state = CHAR;
             break;
         case COMMENT_LINE:
+            // let the line comment be more than one line
             if (ch == '\\')
             {
                 current_state = ESCAPE_COMMENT;
             }
+            // if its the end of the line set a new line and go back to normal mode
             else if (ch == '\n')
             {
                 putchar('\n');
@@ -150,21 +162,25 @@ int main (int argc, char *argv[]){
             }
             break;
         case COMMENT_BLOCK:
+            //be prepared to finish the comment block
             if (ch == '*')
             {
                 current_state = COMMENT_STAR;
             }
             break;
         case COMMENT_STAR:
+            //if the comment block end put a space and go back to normal mode
             if (ch == '/')
             {
                 putchar(' ');
                 current_state = NORMAL;
             }
+            // in order to /******/ to work
             else if (ch == '*')
             {
                 current_state = COMMENT_STAR;
             }
+            // in order to /* * */ to work
             else
             {
                 current_state = COMMENT_BLOCK;
@@ -184,6 +200,7 @@ int main (int argc, char *argv[]){
     {
         error_exit("file finished in an uncompleted char\n");
     }
+    // if the last char was a slash write it
     else if (current_state == SLASH)
     {
         putchar('/');
