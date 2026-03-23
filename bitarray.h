@@ -149,7 +149,7 @@ typedef unsigned long bitarray_index_tx;
     //if the limit isn't exceed gets a 0 that is ignorred due to the coma operator    
     //replace all the variables from the inline function with the calculations
     #define bitarray_getbit(array_name, idx) \
-        (CHECK_LIMIT_EXPR(array_name, idx),(((array_name)[1 + ((idx) / BITS_PER_BLOCK)] & (1UL << ((idx) % BITS_PER_BLOCK))) != 0))
+        ((void)CHECK_LIMIT_EXPR(array_name, idx),(((array_name)[1 + ((idx) / BITS_PER_BLOCK)] & (1UL << ((idx) % BITS_PER_BLOCK))) != 0))
 
 
 #endif
